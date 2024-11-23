@@ -1067,6 +1067,24 @@ class CryptoUtils {
   }
 
   ///
+  /// Decode the given [pem] into a [Uint8List] which contains the private key.
+  ///
+  static Uint8List ed25519PrivateKeyFromPem(String pem) {
+    var bytes = getBytesFromPEMString(pem);
+    return ed25519PrivateKeyFromDERBytes(bytes);
+  }
+
+  ///
+  /// Decode the given [bytes] into a [Uint8List] which contains the private key.
+  ///
+  static Uint8List ed25519PrivateKeyFromDERBytes(Uint8List bytes) {
+    var asn1Parser = ASN1Parser(bytes);
+    var topLevelSeq = asn1Parser.nextObject() as ASN1Sequence;
+    var privateKey = topLevelSeq.elements![2] as ASN1OctetString;
+    return privateKey.valueBytes!.sublist(2);
+  }
+
+  ///
   /// Returns the private key type of the given [pem]
   ///
   static String getPrivateKeyType(String pem) {

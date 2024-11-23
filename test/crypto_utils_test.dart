@@ -101,6 +101,10 @@ AwEHoUQDQgAE7E84d267efnLnMAcSV8MPTGjvbpU+LU5LPSd650yDR9QU80Ng+Iw
 sF0zEAHkQoYVBEhrfAHOLYkE3u08+q2tug==
 -----END EC PRIVATE KEY-----''';
 
+  var ed25519PrivateKey = '''-----BEGIN PRIVATE KEY-----
+MC4CAQAwBQYDK2VwBCIEIMF/KUQqg0KgIiZ4IiyWnn5JLROzwPiPz+minD0ykdU9
+-----END PRIVATE KEY-----''';
+
   test('Test rsaPublicKeyModulusToBytes', () {
     var key = CryptoUtils.rsaPublicKeyFromPem(publicKey);
     var bytes = CryptoUtils.rsaPublicKeyModulusToBytes(key);
@@ -382,6 +386,19 @@ sF0zEAHkQoYVBEhrfAHOLYkE3u08+q2tug==
     var valid = CryptoUtils.ecVerifyBase64(pubKey, bytes, base64Signature);
 
     expect(valid, true);
+  });
+
+  test('Test ed25519PrivateKeyFromDERBytes', () {
+    var bytes = CryptoUtils.getBytesFromPEMString(ed25519PrivateKey);
+    var key = CryptoUtils.ed25519PrivateKeyFromDERBytes(bytes);
+    expect(key.length, 32);
+    expect(HexUtils.encode(key), 'C17F29442A8342A0222678222C969E7E492D13B3C0F88FCFE9A29C3D3291D53D');
+  });
+
+  test('Test ed25519PrivateKeyFromPem', () {
+    var key = CryptoUtils.ed25519PrivateKeyFromPem(ed25519PrivateKey);
+    expect(key.length, 32);
+    expect(HexUtils.encode(key), 'C17F29442A8342A0222678222C969E7E492D13B3C0F88FCFE9A29C3D3291D53D');
   });
 
   test('Test getHash', () {

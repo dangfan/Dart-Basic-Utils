@@ -1916,12 +1916,14 @@ class X509Utils {
       ASN1Sequence pubKeySequence) {
     var algSeq = pubKeySequence.elements!.elementAt(0) as ASN1Sequence;
     var algOi = algSeq.elements!.elementAt(0) as ASN1ObjectIdentifier;
-    var asn1AlgParameters = algSeq.elements!.elementAt(1);
     var algParameters = '';
     var algParametersReadable = '';
-    if (asn1AlgParameters is ASN1ObjectIdentifier) {
-      algParameters = asn1AlgParameters.objectIdentifierAsString!;
-      algParametersReadable = asn1AlgParameters.readableName!;
+    if (algOi.objectIdentifierAsString != '1.3.101.112') {
+      var asn1AlgParameters = algSeq.elements!.elementAt(1);
+      if (asn1AlgParameters is ASN1ObjectIdentifier) {
+        algParameters = asn1AlgParameters.objectIdentifierAsString!;
+        algParametersReadable = asn1AlgParameters.readableName!;
+      }
     }
 
     var pubBitString = pubKeySequence.elements!.elementAt(1) as ASN1BitString;

@@ -403,6 +403,19 @@ FcpEAZ/1tcQxzk7b4aDCqxSyQwTh6SupRDXECUcZbgogXYKLoO0wuy9jWYEBcswC
 Q7FVCLc4EFPwz9tkdLE2N13o
 -----END CERTIFICATE-----''';
 
+  var ed25519Cert = '''-----BEGIN CERTIFICATE-----
+MIIBszCBnKADAgECAgg2nBnRbt214jANBgkqhkiG9w0BAQsFADANMQswCQYDVQQD
+EwJDQTAeFw0yNDExMTgxMzAxMDBaFw0yNTExMTgxMjU1MDBaMBIxEDAOBgNVBAMT
+B2VkMjU1MTkwKjAFBgMrZXADIQBQjlktFBH/ELeFhsS46Nu3n+cJ3UDAuy3w7cnC
+xZd4CqMNMAswCQYDVR0TBAIwADANBgkqhkiG9w0BAQsFAAOCAQEAQgzqf3HMxO9G
+QON3g/t4aAemPlv7XEj0sfkuvcUYsA+HfzzLqYTJLDAxUIe3BAovm+dPYAqN7Tjg
+j75YXo6rIc3VdOt5zFcBJ5+wt34O60+7v0sd/0z1bOIiOFAjC4zeMtmd3D0uSO/w
+FkPXkx8iFX4IaeE9eeERM9Xg2B4wqllcugYe0OoZsqrvSmmJhiiXdYzwmXmHooMP
+pihDw+ZmweWm1r1Z2J9BiJLEYCBaBIRhKTUwcn/u4Q+TqLxPWl+9cpjr3XN2Yx5j
+SmsDUEzfH4OEWqz9SoJD8R9JFKugBxE1Z9k42lSLz/NZc7YdoDHm9TgS/VXUYjcG
+AHsWSWRGWg==
+-----END CERTIFICATE-----''';
+
   var pkcs7 = '''-----BEGIN PKCS7-----
 MIIQcAYJKoZIhvcNAQcCoIIQYTCCEF0CAQExADALBgkqhkiG9w0BBwGgghBFMIIG
 NDCCBRygAwIBAgIQA5d+S+3rXyfS19Bvm94qCTANBgkqhkiG9w0BAQsFADBlMQsw
@@ -1388,6 +1401,15 @@ rn6zwvNaIBmG2reX1OyNE7nRlM1SoBNQ4We+Kf5H2JN1v+4=
     expect(data.issuer.containsKey('2.5.4.3'), true);
     expect(data.issuer['2.5.4.3'],
         'COMODO RSA Organization Validation Secure Server CA');
+  });
+
+  test('Test x509CertificateFromPem with ed25519Cert', () {
+    var data = X509Utils.x509CertificateFromPem(ed25519Cert);
+    expect(data.version, 3);
+    expect(data.serialNumber.toString(), '3935048561713853922');
+    expect(data.signatureAlgorithm, '1.2.840.113549.1.1.11');
+    expect(data.issuer.containsKey('2.5.4.3'), true);
+    expect(data.issuer['2.5.4.3'], 'CA');
   });
 
   test('Test pkcs7FromPem', () {
